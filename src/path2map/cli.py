@@ -9,6 +9,7 @@ from typing import Sequence
 from path2map import __version__
 from path2map.pipeline import PipelineOptions, build_logical_tree
 from path2map.render.csv import CsvRenderOptions, render_csv
+from path2map.render.html import HtmlRenderOptions, render_html
 from path2map.render.json import JsonRenderOptions, render_json
 from path2map.render.markdown import render_markdown
 from path2map.render.text import TextRenderOptions, render_text
@@ -99,6 +100,19 @@ def main(argv: Sequence[str] | None = None) -> int:
             model,
             options=CsvRenderOptions(
                 details=args.details, time_format=args.time_format
+            ),
+        )
+        print(rendered, file=sys.stdout)
+    elif args.type == "html":
+        rendered = render_html(
+            model,
+            options=HtmlRenderOptions(
+                folders_only=args.folders_only,
+                sort=args.sort,
+                comments=args.comments,
+                emojis=args.emojis,
+                details=args.details,
+                time_format=args.time_format,
             ),
         )
         print(rendered, file=sys.stdout)
