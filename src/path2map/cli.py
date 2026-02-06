@@ -8,6 +8,7 @@ from typing import Sequence
 
 from path2map import __version__
 from path2map.pipeline import PipelineOptions, build_logical_tree
+from path2map.render.markdown import render_markdown
 from path2map.render.text import TextRenderOptions, render_text
 
 
@@ -65,17 +66,22 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
     )
 
+    text_options = TextRenderOptions(
+        folders_only=args.folders_only,
+        sort=args.sort,
+        comments=args.comments,
+        emojis=args.emojis,
+        details=args.details,
+        time_format=args.time_format,
+    )
+
     if args.type == "text":
-        rendered = render_text(
+        rendered = render_text(model, options=text_options)
+        print(rendered, file=sys.stdout)
+    elif args.type == "md":
+        rendered = render_markdown(
             model,
-            options=TextRenderOptions(
-                folders_only=args.folders_only,
-                sort=args.sort,
-                comments=args.comments,
-                emojis=args.emojis,
-                details=args.details,
-                time_format=args.time_format,
-            ),
+            options=text_options,
         )
         print(rendered, file=sys.stdout)
 
