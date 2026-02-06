@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from typing import Sequence
 
 from path2map import __version__
 from path2map.pipeline import PipelineOptions, build_logical_tree
+from path2map.render.text import TextRenderOptions, render_text
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -52,7 +54,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
-    build_logical_tree(
+    model = build_logical_tree(
         PipelineOptions(
             directory=args.directory,
             max_depth=args.max_depth,
@@ -62,6 +64,21 @@ def main(argv: Sequence[str] | None = None) -> int:
             filters=args.filter,
         )
     )
+
+    if args.type == "text":
+        rendered = render_text(
+            model,
+            options=TextRenderOptions(
+                folders_only=args.folders_only,
+                sort=args.sort,
+                comments=args.comments,
+                emojis=args.emojis,
+                details=args.details,
+                time_format=args.time_format,
+            ),
+        )
+        print(rendered, file=sys.stdout)
+
     return 0
 
 
