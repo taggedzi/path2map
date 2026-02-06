@@ -8,6 +8,8 @@ from typing import Sequence
 
 from path2map import __version__
 from path2map.pipeline import PipelineOptions, build_logical_tree
+from path2map.render.csv import CsvRenderOptions, render_csv
+from path2map.render.json import JsonRenderOptions, render_json
 from path2map.render.markdown import render_markdown
 from path2map.render.text import TextRenderOptions, render_text
 
@@ -82,6 +84,22 @@ def main(argv: Sequence[str] | None = None) -> int:
         rendered = render_markdown(
             model,
             options=text_options,
+        )
+        print(rendered, file=sys.stdout)
+    elif args.type == "json":
+        rendered = render_json(
+            model,
+            options=JsonRenderOptions(
+                details=args.details, time_format=args.time_format
+            ),
+        )
+        print(rendered, file=sys.stdout)
+    elif args.type == "csv":
+        rendered = render_csv(
+            model,
+            options=CsvRenderOptions(
+                details=args.details, time_format=args.time_format
+            ),
         )
         print(rendered, file=sys.stdout)
 
