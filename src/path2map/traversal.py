@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 import os
 from pathlib import Path
 from typing import Callable, Iterable, Literal
@@ -20,6 +21,7 @@ class TraversalOptions:
     max_depth: int | None = None
     symlink_mode: SymlinkMode = "show"
     sort_key: SortKey | None = None
+    collect_metadata: bool = False
 
 
 @dataclass(frozen=True)
@@ -34,6 +36,8 @@ class TraversedEntry:
     is_symlink: bool = False
     symlink_target: str | None = None
     symlink_cycle: bool = False
+    size: int | None = None
+    mtime: datetime | None = None
 
 
 def build_tree(
@@ -101,6 +105,8 @@ def tree_from_entries(
                 name=entry.name,
                 depth=entry.depth,
                 ext=entry.ext,
+                size=entry.size,
+                mtime=entry.mtime,
                 is_symlink=entry.is_symlink,
                 symlink_target=entry.symlink_target,
                 symlink_cycle=entry.symlink_cycle,
@@ -189,6 +195,8 @@ def _walk_directory(
                 is_dir=False,
                 depth=depth,
                 ext=path.suffix,
+                size=_entry_size(entry) if options.collect_metadata else None,
+                mtime=_entry_mtime(entry) if options.collect_metadata else None,
                 is_symlink=is_symlink,
                 symlink_target=_symlink_target(path) if is_symlink else None,
             )
@@ -227,5 +235,19 @@ def _directory_identity(path: Path) -> tuple[int, int] | str:
 def _symlink_target(path: Path) -> str | None:
     try:
         return os.readlink(path)
+    except OSError:
+        return None
+
+
+def _entry_size(entry: os.DirEntry[str]) -> int | None:
+    try:
+        return entry.stat(follow_symlinks=False).st_size
+    except OSError:
+        return None
+
+
+def _entry_mtime(entry: os.DirEntry[str]) -> datetime | None:
+    try:
+        return datetime.fromtimestamp(entry.stat(follow_symlinks=False).st_mtime)
     except OSError:
         return None

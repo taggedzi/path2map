@@ -19,6 +19,7 @@ class HtmlRenderOptions:
     emojis: bool = False
     details: str = "none"
     time_format: str = "%Y-%m-%d %H:%M"
+    size_format: str = "binary"
 
 
 def render_html(model: TreeModel, *, options: HtmlRenderOptions | None = None) -> str:
@@ -129,7 +130,7 @@ def _format_details(node: TreeNode, *, options: HtmlRenderOptions) -> str:
 
     values: list[str] = []
     if options.details in {"size", "size,mtime"} and node.size is not None:
-        values.append(f"{node.size} B")
+        values.append(_format_size(node.size, options.size_format))
 
     if options.details in {"mtime", "size,mtime"} and node.mtime is not None:
         values.append(_format_mtime(node.mtime, options.time_format))
@@ -139,3 +140,20 @@ def _format_details(node: TreeNode, *, options: HtmlRenderOptions) -> str:
 
 def _format_mtime(value: datetime, time_format: str) -> str:
     return value.strftime(time_format)
+
+
+def _format_size(value: int, size_format: str) -> str:
+    base = 1024 if size_format == "binary" else 1000
+    units = (
+        ("B", "KiB", "MiB", "GiB", "TiB")
+        if base == 1024
+        else ("B", "KB", "MB", "GB", "TB")
+    )
+    size = float(value)
+    for unit in units:
+        if size < base or unit == units[-1]:
+            if unit == "B":
+                return f"{int(size)} B"
+            return f"{size:.1f} {unit}"
+        size /= base
+    return f"{int(value)} B"

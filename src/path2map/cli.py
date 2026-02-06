@@ -66,6 +66,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             symlinks=args.symlinks,
             cli_ignore=args.ignore,
             filters=args.filter,
+            details=args.details,
         )
     )
 
@@ -74,8 +75,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         sort=args.sort,
         comments=args.comments,
         emojis=args.emojis,
+        color=args.color,
         details=args.details,
         time_format=args.time_format,
+        size_format=args.size_format,
+        details_style=args.details_style,
     )
 
     if args.type == "text":
@@ -113,6 +117,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 emojis=args.emojis,
                 details=args.details,
                 time_format=args.time_format,
+                size_format=args.size_format,
             ),
         )
         print(rendered, file=sys.stdout)

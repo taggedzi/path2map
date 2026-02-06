@@ -25,6 +25,7 @@ class PipelineOptions:
     p2mignore_path: str | None = None
     cli_ignore: str | None = None
     filters: list[str] = field(default_factory=list)
+    details: str = "none"
 
 
 def build_logical_tree(options: PipelineOptions) -> TreeModel:
@@ -33,7 +34,9 @@ def build_logical_tree(options: PipelineOptions) -> TreeModel:
     scan_root, entries, max_depth = enumerate_entries(
         options.directory,
         options=TraversalOptions(
-            max_depth=options.max_depth, symlink_mode=symlink_mode
+            max_depth=options.max_depth,
+            symlink_mode=symlink_mode,
+            collect_metadata=options.details != "none",
         ),
     )
 
