@@ -6,6 +6,7 @@ import argparse
 from typing import Sequence
 
 from path2map import __version__
+from path2map.pipeline import PipelineOptions, build_logical_tree
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -49,7 +50,18 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the CLI and return a process exit code."""
     parser = build_parser()
-    parser.parse_args(argv)
+    args = parser.parse_args(argv)
+
+    build_logical_tree(
+        PipelineOptions(
+            directory=args.directory,
+            max_depth=args.max_depth,
+            follow_symlinks=args.follow_symlinks,
+            symlinks=args.symlinks,
+            cli_ignore=args.ignore,
+            filters=args.filter,
+        )
+    )
     return 0
 
 
