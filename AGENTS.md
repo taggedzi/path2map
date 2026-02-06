@@ -8,6 +8,18 @@ If anything in this file conflicts with `SPECS.md`, **`SPECS.md` is the source o
 
 ---
 
+## Python environment
+
+This project uses a Python virtual environment located at `.venv/`.
+
+Rules:
+- The `.venv/` directory is created and managed by the user.
+- Agents must not create, modify, delete, or replace virtual environments.
+- All Python commands (tests, linting, formatting, execution) must be run
+  using the `.venv/` environment.
+- If the environment is not active or unavailable, agents must stop and ask
+  for guidance rather than guessing.
+
 ## 0) Decision hierarchy (important)
 
 When guidance conflicts, follow this order:
