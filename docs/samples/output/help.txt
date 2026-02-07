@@ -1,0 +1,68 @@
+usage: path2map [-h] [--directory DIRECTORY] [-o OUTPUT] [--stdout]
+                [-D MAX_DEPTH] [--follow-symlinks]
+                [--symlinks {skip,show,follow}] [-i IGNORE] [-F FILTER] [-f]
+                [-s] [-c] [--emojis] [--color {auto,always,never}]
+                [--theme THEME] [--details {none,size,mtime,size,mtime}]
+                [--time-format TIME_FORMAT] [--size-format {binary,decimal}]
+                [--details-style {inline,columns}]
+                [-t {text,md,json,csv,html}] [-V]
+
+Inspect a directory tree and render deterministic maps in text and structured formats.
+
+options:
+  -h, --help            show this help message and exit
+  --directory DIRECTORY
+                        Root directory to scan. (default: .)
+  -o OUTPUT, --output OUTPUT
+                        Output file path or output directory. If a directory
+                        is provided, a timestamped filename is generated.
+                        (default: None)
+  --stdout              Also print rendered output to stdout when writing to
+                        --output. (default: False)
+  -D MAX_DEPTH, --max-depth MAX_DEPTH
+                        Maximum traversal depth from --directory (0 means only
+                        the root). (default: None)
+  --follow-symlinks     Follow symbolic links during traversal (legacy
+                        convenience flag). (default: False)
+  --symlinks {skip,show,follow}
+                        Symlink behavior: skip links, show links, or follow
+                        links. (default: None)
+  -i IGNORE, --ignore IGNORE
+                        Regex exclusion applied after defaults and .p2mignore
+                        rules. (default: None)
+  -F FILTER, --filter FILTER
+                        Regex include filter (repeatable; OR logic). Ancestors
+                        are retained. (default: [])
+  -f, --folders-only    Render directories only. (default: False)
+  -s, --sort            Sort each directory (directories first, then files,
+                        case-insensitive). (default: False)
+  -c, --comments        Add contextual labels such as "[Empty folder]" for
+                        empty directories. (default: False)
+  --emojis              Prefix labels with emojis where supported by the
+                        output type. (default: False)
+  --color {auto,always,never}
+                        Color policy for text/markdown output. auto=TTY-aware,
+                        always=force ANSI, never=disable. (default: auto)
+  --theme THEME         Reserved for future renderer themes (currently no
+                        effect). (default: None)
+  --details {none,size,mtime,size,mtime}
+                        Metadata details to include in output. (default: none)
+  --time-format TIME_FORMAT
+                        strftime format used when mtime details are rendered.
+                        (default: %Y-%m-%d %H:%M)
+  --size-format {binary,decimal}
+                        Size units for rendered size details. (default:
+                        binary)
+  --details-style {inline,columns}
+                        Render metadata details inline or in aligned columns.
+                        (default: inline)
+  -t {text,md,json,csv,html}, --type {text,md,json,csv,html}
+                        Output format. (default: text)
+  -V, --version         show program's version number and exit
+
+Examples:
+  path2map --directory .
+  path2map --directory . --max-depth 2 --sort
+  path2map --directory . --filter "\.py$" --ignore "^build/"
+  path2map --directory . --type json --output tree.json
+  path2map --directory . --type md --output tree.md --stdout

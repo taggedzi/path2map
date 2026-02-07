@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <rect width="1200" height="760" fill="#0f172a"/>
+  <rect x="24" y="24" width="1152" height="712" rx="10" fill="#111827" stroke="#334155"/>
+  <text x="44" y="60" fill="#93c5fd" font-family="monospace" font-size="20">path2map --help (excerpt)</text>
+  <text x="44" y="100" fill="#e5e7eb" font-family="monospace" font-size="16">usage: path2map [-h] [--directory DIRECTORY] [-o OUTPUT] [--stdout]</text>
+  <text x="44" y="130" fill="#e5e7eb" font-family="monospace" font-size="16">                [-D MAX_DEPTH] [--follow-symlinks] [--symlinks {...}]</text>
+  <text x="44" y="160" fill="#e5e7eb" font-family="monospace" font-size="16">                [-i IGNORE] [-F FILTER] [-f] [-s] [-c] [--emojis]</text>
+  <text x="44" y="190" fill="#e5e7eb" font-family="monospace" font-size="16">                [--color {auto,always,never}] [--details {...}] ...</text>
+  <text x="44" y="240" fill="#a7f3d0" font-family="monospace" font-size="16">options:</text>
+  <text x="44" y="270" fill="#e5e7eb" font-family="monospace" font-size="16">  --directory DIRECTORY    Root directory to scan. (default: .)</text>
+  <text x="44" y="300" fill="#e5e7eb" font-family="monospace" font-size="16">  --max-depth MAX_DEPTH    Maximum traversal depth from --directory.</text>
+  <text x="44" y="330" fill="#e5e7eb" font-family="monospace" font-size="16">  --ignore IGNORE          Regex exclusion after defaults/.p2mignore.</text>
+  <text x="44" y="360" fill="#e5e7eb" font-family="monospace" font-size="16">  --filter FILTER          Include-only regex; repeatable.</text>
+  <text x="44" y="390" fill="#e5e7eb" font-family="monospace" font-size="16">  --type {text,md,json,csv,html}  Output format. (default: text)</text>
+  <text x="44" y="440" fill="#fde68a" font-family="monospace" font-size="16">examples:</text>
+  <text x="44" y="470" fill="#e5e7eb" font-family="monospace" font-size="16">  path2map --directory .</text>
+  <text x="44" y="500" fill="#e5e7eb" font-family="monospace" font-size="16">  path2map --directory . --max-depth 2 --sort</text>
+  <text x="44" y="530" fill="#e5e7eb" font-family="monospace" font-size="16">  path2map --directory . --filter "\\.py$" --ignore "^build/"</text>
+  <text x="44" y="560" fill="#e5e7eb" font-family="monospace" font-size="16">  path2map --directory . --type json --output tree.json</text>
+  <text x="44" y="590" fill="#e5e7eb" font-family="monospace" font-size="16">  path2map --directory . --type md --output tree.md --stdout</text>
+</svg>

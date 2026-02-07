@@ -1,0 +1,11 @@
+path,name,type,ext,depth,size,mtime
+.,project,directory,,0,,
+assets,assets,directory,,1,,
+assets/images,images,directory,,2,,
+assets/images/logo.svg,logo.svg,file,.svg,3,,
+src,src,directory,,1,,
+src/main.py,main.py,file,.py,2,,
+src/utils.py,utils.py,file,.py,2,,
+.p2mignore,.p2mignore,file,,1,,
+config.toml,config.toml,file,.toml,1,,
+README.md,README.md,file,.md,1,,

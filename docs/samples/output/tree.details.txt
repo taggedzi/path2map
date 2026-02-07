@@ -1,0 +1,10 @@
+project
+├── assets
+│   └── images
+│       └── logo.svg  216 B  2026-02-06
+├── src
+│   ├── main.py       136 B  2026-02-06
+│   └── utils.py      115 B  2026-02-06
+├── .p2mignore        45 B  2026-02-06
+├── config.toml       22 B  2026-02-06
+└── README.md         103 B  2026-02-06

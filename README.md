@@ -11,6 +11,7 @@
 - [Versioning Policy](docs/versioning.md)
 - [Release Dry Run Checklist](docs/release-dry-run.md)
 - [CLI Argument Reference](docs/cli-arguments.md)
+- [Sample Catalog](docs/samples/README.md)
 
 ## Quick Start
 

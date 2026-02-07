@@ -1,0 +1,84 @@
+{
+  "path": ".",
+  "name": "project",
+  "type": "directory",
+  "ext": "",
+  "depth": 0,
+  "children": [
+    {
+      "path": "assets",
+      "name": "assets",
+      "type": "directory",
+      "ext": "",
+      "depth": 1,
+      "children": [
+        {
+          "path": "assets/images",
+          "name": "images",
+          "type": "directory",
+          "ext": "",
+          "depth": 2,
+          "children": [
+            {
+              "path": "assets/images/logo.svg",
+              "name": "logo.svg",
+              "type": "file",
+              "ext": ".svg",
+              "depth": 3,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "src",
+      "name": "src",
+      "type": "directory",
+      "ext": "",
+      "depth": 1,
+      "children": [
+        {
+          "path": "src/main.py",
+          "name": "main.py",
+          "type": "file",
+          "ext": ".py",
+          "depth": 2,
+          "children": []
+        },
+        {
+          "path": "src/utils.py",
+          "name": "utils.py",
+          "type": "file",
+          "ext": ".py",
+          "depth": 2,
+          "children": []
+        }
+      ]
+    },
+    {
+      "path": ".p2mignore",
+      "name": ".p2mignore",
+      "type": "file",
+      "ext": "",
+      "depth": 1,
+      "children": []
+    },
+    {
+      "path": "config.toml",
+      "name": "config.toml",
+      "type": "file",
+      "ext": ".toml",
+      "depth": 1,
+      "children": []
+    },
+    {
+      "path": "README.md",
+      "name": "README.md",
+      "type": "file",
+      "ext": ".md",
+      "depth": 1,
+      "children": []
+    }
+  ]
+}

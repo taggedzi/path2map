@@ -502,3 +502,25 @@ Keep behavior unchanged; this step is documentation/UX only.
 - `python -m path2map --help` shows clear descriptions for all primary flags.
 - Docs include argument descriptions, defaults, and concrete usage examples.
 - No CLI behavior or output semantics change.
+
+---
+
+## Step 22: End-to-End Sample Catalog (Docs + Outputs)
+**Goal**: Provide a committed sample workspace that demonstrates all core CLI output types and feature combinations.
+
+**Prompt**
+```text
+Implement TODO Step 22 from TODO.md only.
+Create and complete a sample catalog under docs:
+- Use `docs/samples/input/` for fixture tree(s)
+- Use `docs/samples/output/` for generated example outputs
+- Maintain `docs/samples/commands.sh` as the canonical generator script
+- Ensure at least one command demonstrates each output type (`text`, `md`, `json`, `csv`, `html`)
+- Include examples covering depth, ignore/filter, folders-only, sorting, comments, emojis, details formatting, and symlink flags
+Document how to regenerate samples and when to refresh them after behavior changes.
+```
+
+**Acceptance**
+- `docs/samples/README.md` explains purpose and regeneration workflow.
+- `docs/samples/commands.sh` runs successfully in `.venv`.
+- Output examples are present and linkable from README/docs.

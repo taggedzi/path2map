@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>path2map</title>
+  <style>
+    body { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin: 1rem; }
+    ul.tree { list-style: none; padding-left: 1rem; }
+    ul.tree ul { list-style: none; padding-left: 1.25rem; }
+    .node { white-space: pre; }
+    details > summary { cursor: pointer; }
+  </style>
+</head>
+<body>
+<ul class="tree">
+  <li>
+    <details open><summary class="node">project</summary>
+      <ul>
+        <li>
+          <details open><summary class="node">assets</summary>
+            <ul>
+              <li>
+                <details open><summary class="node">images</summary>
+                  <ul>
+                    <li><span class="node">logo.svg</span></li>
+                  </ul>
+                </details>
+              </li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details open><summary class="node">src</summary>
+            <ul>
+              <li><span class="node">main.py</span></li>
+              <li><span class="node">utils.py</span></li>
+            </ul>
+          </details>
+        </li>
+        <li><span class="node">.p2mignore</span></li>
+        <li><span class="node">config.toml</span></li>
+        <li><span class="node">README.md</span></li>
+      </ul>
+    </details>
+  </li>
+</ul>
+</body>
+</html>

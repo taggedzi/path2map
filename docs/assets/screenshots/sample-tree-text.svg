@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520">
+  <rect width="1000" height="520" fill="#0b1020"/>
+  <rect x="20" y="20" width="960" height="480" rx="10" fill="#0f172a" stroke="#334155"/>
+  <text x="40" y="58" fill="#93c5fd" font-family="monospace" font-size="20">Sample text output (docs/samples/output/tree.text.txt)</text>
+  <text x="40" y="102" fill="#e5e7eb" font-family="monospace" font-size="18">project</text>
+  <text x="40" y="136" fill="#e5e7eb" font-family="monospace" font-size="18">|- assets</text>
+  <text x="40" y="170" fill="#e5e7eb" font-family="monospace" font-size="18">|  `- images</text>
+  <text x="40" y="204" fill="#e5e7eb" font-family="monospace" font-size="18">|     `- logo.svg</text>
+  <text x="40" y="238" fill="#e5e7eb" font-family="monospace" font-size="18">|- src</text>
+  <text x="40" y="272" fill="#e5e7eb" font-family="monospace" font-size="18">|  |- main.py</text>
+  <text x="40" y="306" fill="#e5e7eb" font-family="monospace" font-size="18">|  `- utils.py</text>
+  <text x="40" y="340" fill="#e5e7eb" font-family="monospace" font-size="18">|- .p2mignore</text>
+  <text x="40" y="374" fill="#e5e7eb" font-family="monospace" font-size="18">|- config.toml</text>
+  <text x="40" y="408" fill="#e5e7eb" font-family="monospace" font-size="18">`- README.md</text>
+</svg>
