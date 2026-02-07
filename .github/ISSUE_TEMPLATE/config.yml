@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability report
+    url: https://github.com/taggedzi/path2map/security/advisories/new
+    about: Please report security issues privately.
+  - name: Usage questions / discussions
+    url: https://github.com/taggedzi/path2map/discussions
+    about: Ask questions and share usage ideas in Discussions.
