@@ -2,6 +2,49 @@
 
 `path2map` inspects a directory tree and exports deterministic maps in text and structured formats.
 
+## Why make path2map
+
+There are other tools out there that make a tree based folder map, but I wanted one that would allow a .gitignore type file that it observed to block files and folders in a project. So for example I often work with python programming and I often end up with a lot of hidden folders like .mypy_cache, .ruff_chache, .pytest_cache, etc. And I want to be able to see the entire project with out all the **extra stuff** and allow me to consistently filter, sort, and collect data on a project. It has many usages outside of this so I am trying to make it very basic and very utilitarian.
+
+My usecase I put a `.p2mignore` file in the root of your project and exclude the tree parts you don't want included just like a `.gitignore` file. And none of those will show up in your tree.  
+
+## Here are some of the features this provides
+
+* output in many different formats like stdout, TEXT, MARKDOWN, JSON, CVS, and even HTML.
+* It handles symlinks and allows depth control to prevent infinite recursion.
+* Regex exclusion applied after defaults and .p2mignore rules.
+* You can include regex filters.
+* A simple sort feature
+* Emoji (folder/file icon) support.
+* Color output.
+* File detail collection like file size and time
+
+## Simple Example
+
+```text
+(.venv) tagger@path2map:~/path2map/docs/samples/input/project$ path2map --directory .
+project
+├── assets
+│   └── images
+│       └── logo.svg
+├── src
+│   ├── main.py
+│   └── utils.py
+├── .p2mignore
+├── config.toml
+└── README.md
+```
+
+## Sample Screen Shots
+
+Help output preview:
+
+![CLI help screenshot](../assets/screenshots/path2map-help.jpg)
+
+Sample text tree preview:
+
+![Sample tree screenshot](../assets/screenshots/path2map-default.jpg)
+
 ## Project Policies
 
 - [Contributing](CONTRIBUTING.md)

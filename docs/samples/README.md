@@ -26,11 +26,11 @@ This generates output files under `docs/samples/output/`.
 
 Help output preview:
 
-![CLI help screenshot](../assets/screenshots/help-output.svg)
+![CLI help screenshot](../assets/screenshots/path2map-help.jpg)
 
 Sample text tree preview:
 
-![Sample tree screenshot](../assets/screenshots/sample-tree-text.svg)
+![Sample tree screenshot](../assets/screenshots/path2map-default.jpg)
 
 ## Output Index
 
