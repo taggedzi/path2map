@@ -9,6 +9,7 @@
 - [Security Policy](SECURITY.md)
 - [Changelog](CHANGELOG.md)
 - [Versioning Policy](docs/versioning.md)
+- [Release Dry Run Checklist](docs/release-dry-run.md)
 
 ## Quick Start
 

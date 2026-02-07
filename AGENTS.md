@@ -214,6 +214,18 @@ python -m pip install -e ".[dev]"
 python -m black .
 ```
 
+Agent runtime note (Codex sandbox):
+- In some Codex sessions, `python -m black .` may hang even when formatting is clean.
+- If this occurs, run Black one file at a time:
+
+```bash
+for f in $(git ls-files '*.py'); do python -m black --check "$f" || exit 1; done
+```
+
+- Treat this as an agent-environment workaround only. If the user's local
+  environment does not have this issue, keep using the normal `python -m black .`
+  command.
+
 ### Lint
 
 ```bash
