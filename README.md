@@ -8,6 +8,7 @@
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Security Policy](SECURITY.md)
 - [Changelog](CHANGELOG.md)
+- [Versioning Policy](docs/versioning.md)
 
 ## Quick Start
 
