@@ -26,6 +26,31 @@ Optional explicit coverage run:
 python -m pytest --cov=path2map --cov-report=term-missing
 ```
 
+## Packaging Validation
+
+Before release, run a full packaging check from the repository root:
+
+```bash
+source .venv/bin/activate
+bash scripts/package_check.sh
+```
+
+Equivalent manual commands:
+
+```bash
+source .venv/bin/activate
+python -m pip install --upgrade build twine
+rm -rf dist build .pkg-smoke-venv src/path2map.egg-info
+python -m build
+python -m twine check dist/*
+python -m venv .pkg-smoke-venv
+source .pkg-smoke-venv/bin/activate
+python -m pip install --no-deps dist/path2map-*.whl
+path2map --help
+deactivate
+rm -rf .pkg-smoke-venv
+```
+
 ## Opening a Pull Request
 
 1. Create a focused branch for one change.
