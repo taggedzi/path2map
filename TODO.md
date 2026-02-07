@@ -480,3 +480,25 @@ Capture a short go/no-go checklist in docs or release notes draft.
 
 **Acceptance**
 - One documented dry run is completed with explicit go/no-go outcome.
+
+---
+
+## Step 21: CLI Argument Documentation and Help UX
+**Goal**: Provide complete, user-friendly documentation for CLI arguments across help output and docs.
+
+**Prompt**
+```text
+Implement TODO Step 21 from TODO.md only.
+Improve CLI argument documentation in all high-value user touchpoints:
+- Expand argparse help text for each flag with clear behavior descriptions
+- Add practical examples in `--help` epilog/usage where appropriate
+- Ensure defaults and accepted values are visible in help output
+- Update README and/or docs with a dedicated CLI arguments reference table
+- Include example commands for common workflows and combinations
+Keep behavior unchanged; this step is documentation/UX only.
+```
+
+**Acceptance**
+- `python -m path2map --help` shows clear descriptions for all primary flags.
+- Docs include argument descriptions, defaults, and concrete usage examples.
+- No CLI behavior or output semantics change.

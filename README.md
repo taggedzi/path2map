@@ -10,6 +10,7 @@
 - [Changelog](CHANGELOG.md)
 - [Versioning Policy](docs/versioning.md)
 - [Release Dry Run Checklist](docs/release-dry-run.md)
+- [CLI Argument Reference](docs/cli-arguments.md)
 
 ## Quick Start
 
