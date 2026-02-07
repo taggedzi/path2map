@@ -62,3 +62,21 @@ rm -rf .pkg-smoke-venv
    - Why it changed
    - How you validated it (commands + results)
    - Any follow-ups or limitations
+
+## Release Process (Maintainers)
+
+1. Ensure `main` is green in CI and `CHANGELOG.md` + version are updated.
+2. Run local packaging validation:
+   - `source .venv/bin/activate`
+   - `bash scripts/package_check.sh`
+3. Create and push a version tag:
+   - `git tag v0.1.0`
+   - `git push origin v0.1.0`
+4. The `Release` workflow will:
+   - build `sdist` and `wheel`
+   - run `twine check`
+   - create a GitHub Release and attach artifacts
+5. Optional PyPI publishing:
+   - set repository variable `PYPI_PUBLISH=true`
+   - set secret `PYPI_API_TOKEN`
+   - configure required approvals on the `pypi` environment
