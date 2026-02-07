@@ -39,11 +39,11 @@ project
 
 Help output preview:
 
-![CLI help screenshot](../assets/screenshots/path2map-help.jpg)
+![CLI help screenshot](/docs/assets/screenshots/path2map-help.jpg)
 
 Sample text tree preview:
 
-![Sample tree screenshot](../assets/screenshots/path2map-default.jpg)
+![Sample tree screenshot](/docs/assets/screenshots/path2map-default.jpg)
 
 ## Project Policies
 
