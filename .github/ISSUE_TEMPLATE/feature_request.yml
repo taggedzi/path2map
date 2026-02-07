@@ -1,0 +1,45 @@
+name: Feature request
+description: Propose a new feature or enhancement.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please keep requests focused and describe user impact.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What user problem are you trying to solve?
+      placeholder: Describe the limitation or pain point.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What should path2map do?
+      placeholder: Describe behavior, flags, and output expectations.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: Other approaches you considered.
+    validations:
+      required: false
+
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility impact
+      description: Any possible breaking changes to CLI behavior or JSON/CSV schema?
+      placeholder: None / explain possible impact.
+    validations:
+      required: true
