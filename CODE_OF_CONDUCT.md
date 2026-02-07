@@ -60,7 +60,8 @@ representative at an online or offline event.
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the project maintainers at:
 
-- TODO: add maintainer contact email
+- https://github.com/taggedzi/path2map/discussions
+- https://github.com/taggedzi (maintainer contact page)
 
 All complaints will be reviewed and investigated promptly and fairly.
 

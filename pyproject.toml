@@ -8,7 +8,28 @@ version = "0.1.0"
 description = "Directory-structure inspection and export tool"
 readme = "README.md"
 requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [{name = "Matthew Craig"}]
+keywords = ["cli", "filesystem", "tree", "documentation", "developer-tools"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Utilities",
+]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/taggedzi/path2map"
+Repository = "https://github.com/taggedzi/path2map"
+Issues = "https://github.com/taggedzi/path2map/issues"
+Changelog = "https://github.com/taggedzi/path2map/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 dev = [

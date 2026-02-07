@@ -4,7 +4,10 @@
 
 Please report suspected vulnerabilities privately to the project maintainers:
 
-- TODO: add security contact email
+- Preferred: GitHub private security advisory:
+  https://github.com/taggedzi/path2map/security/advisories/new
+- Fallback: open a private maintainer contact via:
+  https://github.com/taggedzi
 
 Include:
 - A clear description of the issue

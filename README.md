@@ -2,6 +2,13 @@
 
 `path2map` inspects a directory tree and exports deterministic maps in text and structured formats.
 
+## Project Policies
+
+- [Contributing](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security Policy](SECURITY.md)
+- [Changelog](CHANGELOG.md)
+
 ## Quick Start
 
 ```bash
