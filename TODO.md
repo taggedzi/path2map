@@ -336,3 +336,147 @@ Use a clarification prompt before implementation if any of these remain ambiguou
 - Commit message style:
   - `step-<N>: <concise behavior>`
   - Example: `step-5: add filter stage with ancestor retention`
+
+---
+
+## Release Readiness Track (GitHub + Packaging)
+
+Use these after core implementation is stable and tests are green.
+
+## Step 14: Public Repo Baseline and Metadata Audit
+**Goal**: Ensure repository metadata and top-level docs are complete for public use.
+
+**Prompt**
+```text
+Implement TODO Step 14 from TODO.md only.
+Audit and tighten top-level project docs/metadata:
+- README quick start accuracy
+- CHANGELOG presence/version alignment
+- CONTRIBUTING, CODE_OF_CONDUCT, SECURITY completeness
+- LICENSE presence and consistency
+- pyproject metadata completeness (description/readme/requires-python/classifiers/urls)
+Update only gaps needed for first public release.
+```
+
+**Acceptance**
+- Top-level docs and package metadata are complete and internally consistent.
+
+---
+
+## Step 15: Packaging Validation (sdist/wheel + install smoke test)
+**Goal**: Prove the package can be built and installed cleanly.
+
+**Prompt**
+```text
+Implement TODO Step 15 from TODO.md only.
+Add/verify packaging workflow:
+- Build source + wheel artifacts
+- Validate package metadata
+- Perform a clean install smoke test from built wheel
+- Verify CLI entrypoint works after install
+Document exact local commands in README or CONTRIBUTING.
+Do not publish anything yet.
+```
+
+**Acceptance**
+- `sdist` and `wheel` build successfully.
+- Install smoke test passes from built artifact.
+
+---
+
+## Step 16: CI Automation (Quality Gates)
+**Goal**: Add GitHub Actions checks that enforce quality on every PR.
+
+**Prompt**
+```text
+Implement TODO Step 16 from TODO.md only.
+Create CI workflow(s) for pull requests and main branch:
+- Python setup
+- install with dev dependencies
+- black --check
+- ruff check
+- mypy src
+- pytest with coverage output
+Fail fast on check failures and keep workflow logs readable.
+```
+
+**Acceptance**
+- CI runs automatically for PRs and pushes.
+- Lint/type/test gates block regressions.
+
+---
+
+## Step 17: Release Automation (Tag/Publish Preparation)
+**Goal**: Define a safe, repeatable release path.
+
+**Prompt**
+```text
+Implement TODO Step 17 from TODO.md only.
+Set up release automation strategy (without forcing an immediate publish):
+- tag-driven release workflow
+- build artifacts in CI for tags
+- optional publish job guarded by secrets/environment approval
+- attach artifacts to GitHub Release
+Document release steps for maintainers.
+```
+
+**Acceptance**
+- Maintainer can cut a release from a tag with minimal manual steps.
+- Publishing path is explicit and guarded.
+
+---
+
+## Step 18: Versioning and Compatibility Policy
+**Goal**: Make version bumps and compatibility expectations explicit.
+
+**Prompt**
+```text
+Implement TODO Step 18 from TODO.md only.
+Document project versioning policy:
+- SemVer interpretation for this CLI/package
+- what counts as breaking change (CLI flags, JSON/CSV schema, defaults)
+- release checklist including CHANGELOG updates
+Add short policy section in docs and link from README.
+```
+
+**Acceptance**
+- Contributors have clear rules for version bumps and compatibility.
+
+---
+
+## Step 19: Issue/PR Templates and GitHub Governance
+**Goal**: Improve signal quality and triage consistency on public issues/PRs.
+
+**Prompt**
+```text
+Implement TODO Step 19 from TODO.md only.
+Add GitHub community health templates/config:
+- bug report template
+- feature request template
+- pull request template
+- optional issue config for support/usage redirection
+Keep templates concise and actionable.
+```
+
+**Acceptance**
+- New issues/PRs use structured templates with required context.
+
+---
+
+## Step 20: Final Public Release Dry Run
+**Goal**: Perform one end-to-end dry run before public announcement.
+
+**Prompt**
+```text
+Implement TODO Step 20 from TODO.md only.
+Run a final release-candidate dry run:
+- full local quality checks
+- CI green on branch
+- package build/install smoke test
+- docs link check/manual sanity pass
+- verify changelog/version/tag plan
+Capture a short go/no-go checklist in docs or release notes draft.
+```
+
+**Acceptance**
+- One documented dry run is completed with explicit go/no-go outcome.
