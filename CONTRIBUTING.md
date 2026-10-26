@@ -26,6 +26,13 @@ Optional explicit coverage run:
 python -m pytest --cov=path2map --cov-report=term-missing
 ```
 
+For the existing Windows environment, run checks with
+`.\.venv-win\Scripts\python.exe` in place of `python`.
+The four filesystem symlink tests require permission to create directory symlinks.
+When Windows denies that privilege (WinError 1314), those tests skip with an
+explanation; they run normally when the privilege is available. Use `python -m
+pytest -rs` to see skip reasons. Skipped tests do not validate symlink behavior.
+
 ## Packaging Validation
 
 Before release, run a full packaging check from the repository root:
@@ -76,7 +83,5 @@ rm -rf .pkg-smoke-venv
    - build `sdist` and `wheel`
    - run `twine check`
    - create a GitHub Release and attach artifacts
-5. Optional PyPI publishing:
-   - set repository variable `PYPI_PUBLISH=true`
-   - set secret `PYPI_API_TOKEN`
-   - configure required approvals on the `pypi` environment
+
+Release automation publishes package artifacts to GitHub Releases only.

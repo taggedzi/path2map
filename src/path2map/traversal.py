@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import os
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from datetime import datetime
-import os
 from pathlib import Path
-from typing import Callable, Iterable, Literal
+from typing import Literal
 
 from path2map.model import TreeModel, TreeNode
 

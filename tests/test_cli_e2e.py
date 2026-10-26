@@ -70,11 +70,13 @@ def test_cli_max_depth_zero_e2e(tmp_path: Path, capsys) -> None:
     assert lines == [tmp_path.name]
 
 
-def test_cli_follow_symlinks_cycle_safe_e2e(tmp_path: Path, capsys) -> None:
+def test_cli_follow_symlinks_cycle_safe_e2e(
+    tmp_path: Path, capsys, directory_symlink
+) -> None:
     """Following symlinks avoids infinite recursion in cycle cases."""
     real_dir = tmp_path / "dir"
     real_dir.mkdir()
-    (real_dir / "loop").symlink_to(real_dir, target_is_directory=True)
+    directory_symlink(real_dir / "loop", real_dir)
 
     code, text = _run_cli_capture(
         capsys,

@@ -48,15 +48,9 @@ def test_render_text_default_tree_structure() -> None:
     """Renderer emits deterministic tree lines from model order."""
     text = render_text(_fixture_model())
 
-    assert text == "\n".join(
-        [
-            "project",
-            "├── z.txt",
-            "├── docs",
-            "└── src",
-            "    ├── main.py",
-            "    └── readme.md",
-        ]
+    assert (
+        text
+        == "project\n├── z.txt\n├── docs\n└── src\n    ├── main.py\n    └── readme.md"
     )
 
 
@@ -64,15 +58,9 @@ def test_render_text_with_sort_folders_first() -> None:
     """Sort option renders folders before files alphabetically."""
     text = render_text(_fixture_model(), options=TextRenderOptions(sort=True))
 
-    assert text == "\n".join(
-        [
-            "project",
-            "├── docs",
-            "├── src",
-            "│   ├── main.py",
-            "│   └── readme.md",
-            "└── z.txt",
-        ]
+    assert (
+        text
+        == "project\n├── docs\n├── src\n│   ├── main.py\n│   └── readme.md\n└── z.txt"
     )
 
 
@@ -80,13 +68,7 @@ def test_render_text_folders_only_hides_files() -> None:
     """folders-only omits file nodes from output."""
     text = render_text(_fixture_model(), options=TextRenderOptions(folders_only=True))
 
-    assert text == "\n".join(
-        [
-            "project",
-            "├── docs",
-            "└── src",
-        ]
-    )
+    assert text == "project\n├── docs\n└── src"
 
 
 def test_render_text_comments_mark_empty_directories() -> None:

@@ -62,12 +62,14 @@ def test_pipeline_filter_retains_ancestors(tmp_path: Path) -> None:
     assert _paths_in_preorder(model) == [".", "pkg", "pkg/sub", "pkg/sub/main.py"]
 
 
-def test_pipeline_supports_symlinks_option_over_follow_flag(tmp_path: Path) -> None:
+def test_pipeline_supports_symlinks_option_over_follow_flag(
+    tmp_path: Path, directory_symlink
+) -> None:
     """Explicit --symlinks mode overrides --follow-symlinks compatibility flag."""
     real = tmp_path / "real"
     real.mkdir()
     (real / "inside.py").write_text("x", encoding="utf-8")
-    (tmp_path / "link").symlink_to(real, target_is_directory=True)
+    directory_symlink(tmp_path / "link", real)
 
     model = build_logical_tree(
         PipelineOptions(

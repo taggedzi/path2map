@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-import sys
-from typing import Callable, Literal, TextIO
+from typing import Literal, TextIO
 
 OutputType = Literal["text", "md", "json", "csv", "html"]
 
