@@ -175,23 +175,40 @@ def _matches_glob_pattern(*, rel_path: str, is_dir: bool, pattern: str) -> bool:
 
     segments = normalized_path.split("/")
 
-    if dir_only:
-        if "/" in cleaned or anchored:
-            return normalized_path == cleaned or normalized_path.startswith(
-                f"{cleaned}/"
-            )
+    if "/" not in cleaned and not anchored:
+        return any(
+            fnmatch(segment, cleaned)
+            and (not dir_only or index < len(segments) - 1 or is_dir)
+            for index, segment in enumerate(segments)
+        )
 
-        for index, segment in enumerate(segments):
-            if not fnmatch(segment, cleaned):
-                continue
-            if index < len(segments) - 1 or is_dir:
-                return True
-        return False
+    # Track how many path segments each pattern prefix can consume. Matching
+    # components separately prevents ordinary wildcards from crossing '/'.
+    positions = {0}
+    pattern_segments = cleaned.split("/")
+    for index, component in enumerate(pattern_segments):
+        if not positions:
+            return False
+        if component == "**":
+            # Leading/interior ** includes zero directories; trailing /**
+            # selects contents, not the directory preceding the slash.
+            minimum = min(positions)
+            if index == len(pattern_segments) - 1:
+                minimum += 1
+            positions = set(range(minimum, len(segments) + 1))
+        else:
+            positions = {
+                pos + 1
+                for pos in positions
+                if pos < len(segments) and fnmatch(segments[pos], component)
+            }
 
-    if "/" in cleaned or anchored:
-        return fnmatch(normalized_path, cleaned)
-
-    return any(fnmatch(segment, cleaned) for segment in segments)
+    # An earlier prefix denotes a directory ancestor. The final entry itself
+    # can satisfy a trailing-slash rule only when it is a directory.
+    return any(
+        0 < pos < len(segments) or (pos == len(segments) and (not dir_only or is_dir))
+        for pos in positions
+    )
 
 
 def normalize_relative_path(path: str) -> str:

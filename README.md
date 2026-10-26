@@ -8,6 +8,26 @@ There are other tools out there that make a tree based folder map, but I wanted 
 
 My usecase I put a `.p2mignore` file in the root of your project and exclude the tree parts you don't want included just like a `.gitignore` file. And none of those will show up in your tree.  
 
+## Ignore glob patterns
+
+In the root `.p2mignore`, `*`, `?`, and character classes such as `[ab]`
+match within a single path segment. A whole `**` segment matches across
+directories, including zero directories in `**/secret.txt` or `src/**/cache/`.
+A trailing `src/**` matches everything inside `src`, but not `src` itself.
+
+- `src/*.py` excludes immediate Python children of `src`; it keeps
+  `src/nested/main.py`.
+- `src/*/` excludes immediate subdirectories of `src` and their descendants.
+- `**/cache/` excludes directories named `cache` at any depth and their contents.
+- `/cache/` excludes only the root directory named `cache`; a regular file with
+  that name remains included.
+- `**/secret.txt` excludes that name at the root and at any depth.
+
+A leading `/`, or a slash inside a pattern, anchors it to the scan root.
+Patterns without either match names at any depth. A trailing `/` requires a
+directory. Later `!` rules can restore paths excluded by earlier `.p2mignore`
+rules; built-in ignores and CLI `--ignore` remain hard exclusions.
+
 ## Here are some of the features this provides
 
 * output in many different formats like stdout, TEXT, MARKDOWN, JSON, CVS, and even HTML.

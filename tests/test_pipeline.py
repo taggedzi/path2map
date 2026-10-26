@@ -4,11 +4,59 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from path2map.pipeline import PipelineOptions, build_logical_tree
 
 
 def _paths_in_preorder(model) -> list[str]:
     return [node.path for node in model.iter_preorder()]
+
+
+@pytest.mark.parametrize(
+    "pattern,files,expected",
+    [
+        (
+            "src/*/",
+            ["src/cache/drop.txt", "src/keep.txt"],
+            [".", "src", "src/keep.txt"],
+        ),
+        ("**/cache/", ["a/cache/drop.txt", "a/keep.txt"], [".", "a", "a/keep.txt"]),
+        (
+            "/cache/",
+            ["cache", "a/cache/drop.txt"],
+            [".", "a", "a/cache", "a/cache/drop.txt", "cache"],
+        ),
+        (
+            "src/*.py",
+            ["src/main.py", "src/nested/main.py"],
+            [".", "src", "src/nested", "src/nested/main.py"],
+        ),
+        (
+            "**/secret.txt",
+            ["secret.txt", "a/secret.txt", "a/keep.txt"],
+            [".", "a", "a/keep.txt"],
+        ),
+        (
+            "src/*/\n!src/cache/\nsrc/cache/drop.txt",
+            ["src/cache/drop.txt", "src/cache/keep.txt", "src/other/drop.txt"],
+            [".", "src", "src/cache", "src/cache/keep.txt"],
+        ),
+    ],
+)
+def test_pipeline_ignore_globs(tmp_path: Path, pattern, files, expected) -> None:
+    """Filesystem selection honors glob semantics and ordered negation."""
+    for relative_path in files:
+        path = tmp_path / relative_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.touch()
+    (tmp_path / ".p2mignore").write_text(pattern + "\n", encoding="utf-8")
+
+    model = build_logical_tree(
+        PipelineOptions(directory=str(tmp_path), cli_ignore=r"^\.p2mignore$")
+    )
+
+    assert _paths_in_preorder(model) == expected
 
 
 def test_pipeline_applies_precedence_chain(tmp_path: Path) -> None:
