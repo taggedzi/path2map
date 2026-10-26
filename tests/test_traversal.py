@@ -30,12 +30,14 @@ def test_max_depth_zero_returns_only_root(tmp_path: Path) -> None:
     assert model.root.children == []
 
 
-def test_default_symlink_mode_shows_but_does_not_follow(tmp_path: Path) -> None:
+def test_default_symlink_mode_shows_but_does_not_follow(
+    tmp_path: Path, directory_symlink
+) -> None:
     """Default mode shows symlinked directories as leaf nodes."""
     target_dir = tmp_path / "target"
     target_dir.mkdir()
     (target_dir / "inside.txt").write_text("x", encoding="utf-8")
-    (tmp_path / "link_to_target").symlink_to(target_dir, target_is_directory=True)
+    directory_symlink(tmp_path / "link_to_target", target_dir)
 
     model = build_tree(tmp_path)
 
@@ -48,12 +50,12 @@ def test_default_symlink_mode_shows_but_does_not_follow(tmp_path: Path) -> None:
     assert link_node.children == []
 
 
-def test_follow_symlinks_cycle_safe(tmp_path: Path) -> None:
+def test_follow_symlinks_cycle_safe(tmp_path: Path, directory_symlink) -> None:
     """Following symlinks marks cycle nodes and terminates traversal."""
     real_dir = tmp_path / "dir"
     real_dir.mkdir()
     loop_link = real_dir / "loop"
-    loop_link.symlink_to(real_dir, target_is_directory=True)
+    directory_symlink(loop_link, real_dir)
 
     model = build_tree(tmp_path, options=TraversalOptions(symlink_mode="follow"))
 
