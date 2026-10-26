@@ -10,7 +10,7 @@ If anything in this file conflicts with `SPECS.md`, **`SPECS.md` is the source o
 
 ## Python environment
 
-This project uses a Python virtual environment located at `.venv/`.
+This project uses a Python virtual environment located at `.venv/`. (`.venv-win` for windows)
 
 Rules:
 - The `.venv/` directory is created and managed by the user.
@@ -70,7 +70,7 @@ Create or update an ADR when a change:
 * **Name:** path2map
 * **Primary language:** Python
 * **Minimum runtime:** Python 3.10+
-* **Developer environment:** Python 3.12+ (Windows-friendly)
+* **Developer environment:** Python 3.13+ (Windows-friendly)
 * **Packaging:** pip
 * **Containers:** none
 * **Primary interface:** CLI
