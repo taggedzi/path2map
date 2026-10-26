@@ -35,7 +35,7 @@ and CSV columns are unchanged; without `--folders-only`, file output is unchange
 |---|---|---|
 | `-c, --comments` | Adds contextual labels like `[Empty folder]` on empty directories. | `False` |
 | `--emojis` | Prefix node labels with emoji markers where applicable. | `False` |
-| `--color` | Color mode for text/markdown: `auto`, `always`, `never`. | `auto` |
+| `--color` | Text/Markdown color: `auto` colors TTY stdout only; exports stay plain. `always` forces ANSI for both destinations; `never` disables it. | `auto` |
 | `--theme` | Reserved for future theming support (currently no effect). | not set |
 
 ## Metadata Details

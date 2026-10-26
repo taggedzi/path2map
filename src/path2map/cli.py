@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Sequence
+from dataclasses import replace
 
 from path2map import __version__
 from path2map.output import OutputOptions, route_output
@@ -224,8 +225,20 @@ def main(argv: Sequence[str] | None = None) -> int:
             ),
         )
 
+    stdout_content = None
+    if args.output is not None and args.color == "auto" and args.type in ("text", "md"):
+        # Keep terminal styling separate from the color-free file rendering.
+        if args.stdout:
+            stdout_content = rendered
+        file_options = replace(text_options, color="never")
+        if args.type == "text":
+            rendered = render_text(model, options=file_options)
+        else:
+            rendered = render_markdown(model, options=file_options)
+
     route_output(
         rendered,
+        stdout_content=stdout_content,
         options=OutputOptions(
             output_type=args.type,
             output_path=args.output,

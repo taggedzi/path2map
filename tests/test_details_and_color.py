@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+import sys
 from datetime import datetime
 from pathlib import Path
 
+import pytest
+
+from path2map.cli import main
 from path2map.model import TreeModel, TreeNode
 from path2map.render.text import TextRenderOptions, render_text
 from path2map.traversal import TraversalOptions, enumerate_entries
@@ -77,6 +81,59 @@ def test_text_color_never_disables_ansi() -> None:
     text = render_text(_fixture_model(), options=TextRenderOptions(color="never"))
 
     assert "\x1b[" not in text
+
+
+@pytest.mark.parametrize("output_type", ["text", "md"])
+@pytest.mark.parametrize("is_tty", [False, True])
+@pytest.mark.parametrize("color", ["auto", "always", "never"])
+@pytest.mark.parametrize("destination", ["stdout", "file", "both", "directory"])
+def test_cli_color_per_destination(
+    tmp_path: Path,
+    monkeypatch,
+    capsys,
+    output_type: str,
+    is_tty: bool,
+    color: str,
+    destination: str,
+) -> None:
+    """File color is explicit while automatic stdout color follows its TTY."""
+    root = tmp_path / "project"
+    root.mkdir()
+    (root / "main.py").touch()
+    monkeypatch.setattr(sys.stdout, "isatty", lambda: is_tty)
+    argv = ["--directory", str(root), "--type", output_type]
+    # Omitting --color exercises the default auto policy.
+    if color != "auto":
+        argv += ["--color", color]
+    output = tmp_path / f"tree.{output_type}"
+    if destination == "directory":
+        output = tmp_path / "exports"
+        output.mkdir()
+    if destination != "stdout":
+        argv += ["--output", str(output)]
+    if destination == "both":
+        argv += ["--stdout"]
+
+    assert main(argv) == 0
+    stdout = capsys.readouterr().out
+    if destination in ("stdout", "both"):
+        assert ("\x1b[" in stdout) == (
+            color == "always" or (color == "auto" and is_tty)
+        )
+        assert "main.py" in stdout
+    else:
+        assert stdout == ""
+    if destination != "stdout":
+        if destination == "directory":
+            files = list(output.iterdir())
+            assert len(files) == 1
+            output = files[0]
+        exported = output.read_text(encoding="utf-8")
+        assert ("\x1b[" in exported) == (color == "always")
+        assert "main.py" in exported
+        if output_type == "md":
+            assert exported.startswith("```text\n")
+            assert exported.endswith("\n```")
 
 
 def test_traversal_metadata_not_collected_when_disabled(
