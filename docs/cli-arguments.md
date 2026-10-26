@@ -21,10 +21,15 @@ Use `python -m path2map --help` for the canonical command summary.
 | `--symlinks` | Symlink mode: `skip`, `show`, `follow`. | not set |
 | `-i, --ignore` | Regex exclusion applied after defaults and `.p2mignore`. | not set |
 | `-F, --filter` | Include-only regex filter (repeatable; OR logic). Ancestors of matches are retained. | empty list |
-| `-f, --folders-only` | Render directories only. | `False` |
+| `-f, --folders-only` | Include directories only in all five formats; disable comments. | `False` |
 | `-s, --sort` | Sort nodes per directory (folders first, then files, case-insensitive). | `False` |
 
 ## Presentation
+
+Directory-only selection happens after ignore and regex filtering, before rendering.
+Ancestors of matching files remain as directory context even though the files are
+omitted. Empty directories survive when no regex filter excludes them. JSON keys
+and CSV columns are unchanged; without `--folders-only`, file output is unchanged.
 
 | Argument | Description | Default |
 |---|---|---|

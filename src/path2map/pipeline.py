@@ -26,6 +26,7 @@ class PipelineOptions:
     cli_ignore: str | None = None
     filters: list[str] = field(default_factory=list)
     details: str = "none"
+    folders_only: bool = False
 
 
 def build_logical_tree(options: PipelineOptions) -> TreeModel:
@@ -62,7 +63,11 @@ def build_logical_tree(options: PipelineOptions) -> TreeModel:
     )
 
     kept_paths = {entry.path for entry in after_filter}
-    filtered_entries = [entry for entry in entries if entry.path in kept_paths]
+    filtered_entries = [
+        entry
+        for entry in entries
+        if entry.path in kept_paths and (not options.folders_only or entry.is_dir)
+    ]
 
     return tree_from_entries(
         scan_root=scan_root,

@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- Honor `--folders-only` in JSON and CSV as well as text, Markdown, and HTML
+  by selecting directories in the shared pipeline (#5). Schemas are unchanged.
 - Correct `.p2mignore` glob segment boundaries, root anchoring, directory-only
   rules and descendant matching, and zero-directory `**` matching across all
   export formats (#4). Rule ordering and hard-exclusion precedence are preserved.

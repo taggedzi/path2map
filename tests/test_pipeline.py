@@ -14,6 +14,34 @@ def _paths_in_preorder(model) -> list[str]:
 
 
 @pytest.mark.parametrize(
+    "filters,max_depth,expected",
+    [
+        ([], None, [".", "empty", "pkg", "pkg/sub"]),
+        ([r"main\.py$"], None, [".", "pkg", "pkg/sub"]),
+        ([r"missing$"], None, ["."]),
+        ([], 0, ["."]),
+        ([], 1, [".", "empty", "pkg"]),
+    ],
+)
+def test_pipeline_folders_only_hierarchy(tmp_path, filters, max_depth, expected):
+    """Directory selection preserves filter ancestors and respects depth limits."""
+    (tmp_path / "pkg" / "sub").mkdir(parents=True)
+    (tmp_path / "empty").mkdir()
+    (tmp_path / "pkg" / "sub" / "main.py").touch()
+    (tmp_path / "root.txt").touch()
+    model = build_logical_tree(
+        PipelineOptions(
+            directory=str(tmp_path),
+            folders_only=True,
+            filters=filters,
+            max_depth=max_depth,
+        )
+    )
+    assert _paths_in_preorder(model) == expected
+    assert all(node.type == "directory" for node in model.iter_preorder())
+
+
+@pytest.mark.parametrize(
     "pattern,files,expected",
     [
         (

@@ -2,13 +2,127 @@
 
 from __future__ import annotations
 
+import csv
+import io
 import json
+import re
 from datetime import datetime
+from html.parser import HTMLParser
 from pathlib import Path
 
 import pytest
 
 from path2map import cli
+
+
+class _NodeLabels(HTMLParser):
+    """Extract node labels without including document styles or titles."""
+
+    def __init__(self):
+        super().__init__()
+        self.labels = []
+        self.in_node = False
+
+    def handle_starttag(self, tag, attrs):
+        self.in_node = dict(attrs).get("class") == "node"
+
+    def handle_endtag(self, tag):
+        self.in_node = False
+
+    def handle_data(self, data):
+        if self.in_node:
+            self.labels.append(data)
+
+
+def _exported_names(output, output_type):
+    if output_type == "json":
+
+        def names(node):
+            return [node["name"]] + [
+                name for child in node["children"] for name in names(child)
+            ]
+
+        return names(json.loads(output))
+    if output_type == "csv":
+        return [row["name"] for row in csv.DictReader(io.StringIO(output))]
+    if output_type == "html":
+        parser = _NodeLabels()
+        parser.feed(output)
+        labels = parser.labels
+    else:
+        labels = [line for line in output.splitlines() if not line.startswith("```")]
+    return [
+        re.sub(r"\s+(?:\(.*|\[Empty folder\]).*$", "", label.lstrip(" │├└─📁📄"))
+        for label in labels
+    ]
+
+
+@pytest.mark.parametrize("output_type", ["text", "md", "json", "csv", "html"])
+@pytest.mark.parametrize("folders_only", [False, True])
+@pytest.mark.parametrize(
+    "presentation", [[], ["--comments", "--emojis", "--details", "size,mtime"]]
+)
+def test_cli_folders_only_selected_nodes(
+    tmp_path: Path, capsys, output_type, folders_only, presentation
+) -> None:
+    """All formats select identical nodes, including nested and empty directories."""
+    (tmp_path / "branch" / "nested").mkdir(parents=True)
+    (tmp_path / "empty").mkdir()
+    (tmp_path / "root.txt").touch()
+    (tmp_path / "branch" / "nested" / "leaf.py").touch()
+    argv = [
+        "--directory",
+        str(tmp_path),
+        "-t",
+        output_type,
+        "--color",
+        "never",
+        *presentation,
+    ]
+    if folders_only:
+        argv.append("--folders-only")
+    code, output = _run_cli_capture(capsys, argv)
+    assert code == 0
+    expected = [tmp_path.name, "branch", "nested", "empty"]
+    if not folders_only:
+        expected.insert(3, "leaf.py")
+        expected.append("root.txt")
+    assert _exported_names(output, output_type) == expected
+    expected_paths = [".", "branch", "branch/nested", "empty"]
+    if not folders_only:
+        expected_paths.insert(3, "branch/nested/leaf.py")
+        expected_paths.append("root.txt")
+    if output_type == "json":
+
+        def flatten(node):
+            return [node] + [
+                item for child in node["children"] for item in flatten(child)
+            ]
+
+        nodes = flatten(json.loads(output))
+        keys = {"path", "name", "type", "ext", "depth", "children"}
+        if presentation:
+            keys.update({"size", "mtime"})
+        assert all(set(node) == keys for node in nodes)
+    elif output_type == "csv":
+        reader = csv.DictReader(io.StringIO(output))
+        assert reader.fieldnames == [
+            "path",
+            "name",
+            "type",
+            "ext",
+            "depth",
+            "size",
+            "mtime",
+        ]
+        nodes = list(reader)
+    if output_type in {"json", "csv"}:
+        assert [node["path"] for node in nodes] == expected_paths
+        assert [int(node["depth"]) for node in nodes] == [
+            0 if path == "." else path.count("/") + 1 for path in expected_paths
+        ]
+    if folders_only:
+        assert "Empty folder" not in output
 
 
 def _run_cli_capture(capsys, argv: list[str]) -> tuple[int, str]:

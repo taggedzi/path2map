@@ -172,6 +172,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             cli_ignore=args.ignore,
             filters=args.filter,
             details=args.details,
+            folders_only=args.folders_only,
         )
     )
 
