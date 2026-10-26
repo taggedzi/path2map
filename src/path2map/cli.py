@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import argparse
-from typing import Sequence
+from collections.abc import Sequence
 
 from path2map import __version__
 from path2map.output import OutputOptions, route_output

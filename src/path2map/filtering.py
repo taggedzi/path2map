@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 import re
-from typing import Pattern
+from dataclasses import dataclass, field
+from re import Pattern
 
 from path2map.ignore import PathEntry, normalize_relative_path
 

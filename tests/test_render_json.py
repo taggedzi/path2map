@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 import json
+from datetime import datetime
 
 from path2map.model import TreeModel, TreeNode
 from path2map.render.json import JsonRenderOptions, render_json

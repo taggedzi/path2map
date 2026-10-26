@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import html
 from dataclasses import dataclass
 from datetime import datetime
-import html
 
 from path2map.model import TreeModel, TreeNode
 
@@ -26,27 +26,25 @@ def render_html(model: TreeModel, *, options: HtmlRenderOptions | None = None) -
     """Render logical tree as a deterministic HTML document."""
     opts = options or HtmlRenderOptions()
     body = _render_node_list([model.root], options=opts, is_root=True)
-    return "\n".join(
-        [
-            "<!doctype html>",
-            '<html lang="en">',
-            "<head>",
-            '  <meta charset="utf-8">',
-            '  <meta name="viewport" content="width=device-width, initial-scale=1">',
-            "  <title>path2map</title>",
-            "  <style>",
-            "    body { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin: 1rem; }",
-            "    ul.tree { list-style: none; padding-left: 1rem; }",
-            "    ul.tree ul { list-style: none; padding-left: 1.25rem; }",
-            "    .node { white-space: pre; }",
-            "    details > summary { cursor: pointer; }",
-            "  </style>",
-            "</head>",
-            "<body>",
-            body,
-            "</body>",
-            "</html>",
-        ]
+    return (
+        "<!doctype html>\n"
+        '<html lang="en">\n'
+        "<head>\n"
+        '  <meta charset="utf-8">\n'
+        '  <meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        "  <title>path2map</title>\n"
+        "  <style>\n"
+        "    body { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin: 1rem; }\n"
+        "    ul.tree { list-style: none; padding-left: 1rem; }\n"
+        "    ul.tree ul { list-style: none; padding-left: 1.25rem; }\n"
+        "    .node { white-space: pre; }\n"
+        "    details > summary { cursor: pointer; }\n"
+        "  </style>\n"
+        "</head>\n"
+        "<body>\n"
+        f"{body}\n"
+        "</body>\n"
+        "</html>"
     )
 
 
@@ -100,7 +98,7 @@ def _visible_children(node: TreeNode, *, options: HtmlRenderOptions) -> list[Tre
 
 
 def _format_label(node: TreeNode, *, is_root: bool, options: HtmlRenderOptions) -> str:
-    label = node.name if is_root else node.name
+    label = node.name
 
     if options.emojis:
         if node.type == "directory":
