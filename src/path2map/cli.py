@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 from collections.abc import Sequence
 from dataclasses import replace
 
@@ -164,18 +165,22 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
-    model = build_logical_tree(
-        PipelineOptions(
-            directory=args.directory,
-            max_depth=args.max_depth,
-            follow_symlinks=args.follow_symlinks,
-            symlinks=args.symlinks,
-            cli_ignore=args.ignore,
-            filters=args.filter,
-            details=args.details,
-            folders_only=args.folders_only,
+    try:
+        model = build_logical_tree(
+            PipelineOptions(
+                directory=args.directory,
+                max_depth=args.max_depth,
+                follow_symlinks=args.follow_symlinks,
+                symlinks=args.symlinks,
+                cli_ignore=args.ignore,
+                filters=args.filter,
+                details=args.details,
+                folders_only=args.folders_only,
+            )
         )
-    )
+    except (FileNotFoundError, NotADirectoryError) as exc:
+        print(f"{parser.prog}: error: {exc.strerror}: {exc.filename}", file=sys.stderr)
+        return 1
 
     text_options = TextRenderOptions(
         folders_only=args.folders_only,

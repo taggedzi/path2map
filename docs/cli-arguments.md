@@ -14,6 +14,12 @@ Use `python -m path2map --help` for the canonical command summary.
 
 ## Traversal and Selection
 
+The scan root must exist and be a directory, including with `--max-depth 0`.
+Missing paths and regular files produce a concise error on stderr and exit status
+1, without writing an export. Depth zero validates only the root and does not
+enumerate children or collect file metadata. Root symlinks resolving to directories
+remain valid, regardless of the mode used for descendant symlinks.
+
 | Argument | Description | Default |
 |---|---|---|
 | `-D, --max-depth` | Maximum depth from root (`0` means only the root node). | not set |

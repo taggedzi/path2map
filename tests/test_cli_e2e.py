@@ -209,6 +209,44 @@ def test_cli_precedence_chain_e2e(tmp_path: Path, capsys) -> None:
     assert "config" not in text
 
 
+@pytest.mark.parametrize("output_type", ["text", "md", "json", "csv", "html"])
+@pytest.mark.parametrize("max_depth", [0, 1, None])
+@pytest.mark.parametrize("kind", ["missing", "file"])
+def test_cli_invalid_root_no_export(
+    tmp_path: Path, capsys, output_type, max_depth, kind
+) -> None:
+    """Invalid roots report failure without stdout or creating/overwriting exports."""
+    root = tmp_path / kind
+    if kind == "file":
+        root.touch()
+    output = tmp_path / "export" / f"tree.{output_type}"
+    argv = [
+        "--directory",
+        str(root),
+        "--type",
+        output_type,
+        "--output",
+        str(output),
+        "--stdout",
+    ]
+    if max_depth is not None:
+        argv.extend(["--max-depth", str(max_depth)])
+
+    assert cli.main(argv) == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "error:" in captured.err
+    assert str(root) in captured.err
+    assert "Traceback" not in captured.err
+    assert not output.parent.exists()
+
+    output.parent.mkdir()
+    output.write_text("existing export", encoding="utf-8")
+    assert cli.main(argv) == 1
+    assert output.read_text(encoding="utf-8") == "existing export"
+    assert capsys.readouterr().out == ""
+
+
 def test_cli_max_depth_zero_e2e(tmp_path: Path, capsys) -> None:
     """max-depth=0 returns only root node in rendered output."""
     (tmp_path / "child.txt").write_text("x", encoding="utf-8")

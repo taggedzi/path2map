@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import errno
 import os
+import stat
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from datetime import datetime
@@ -56,12 +58,17 @@ def enumerate_entries(
     *,
     options: TraversalOptions | None = None,
 ) -> tuple[Path, list[TraversedEntry], int | None]:
-    """Enumerate filesystem entries without applying ignore/filter stages."""
+    """Enumerate entries, raising filesystem errors for missing/non-directory roots."""
     opts = options or TraversalOptions()
     scan_root = Path(directory).resolve()
 
     if opts.max_depth is not None and opts.max_depth < 0:
         raise ValueError("max_depth must be >= 0")
+
+    if not stat.S_ISDIR(scan_root.stat().st_mode):
+        raise NotADirectoryError(
+            errno.ENOTDIR, os.strerror(errno.ENOTDIR), str(scan_root)
+        )
 
     if opts.max_depth == 0:
         return scan_root, [], opts.max_depth
