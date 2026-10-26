@@ -17,6 +17,42 @@ def _run_cli_capture(capsys, argv: list[str]) -> tuple[int, str]:
     return exit_code, output
 
 
+@pytest.mark.parametrize("output_type", ["text", "md", "json", "csv", "html"])
+def test_cli_ignore_globs_across_exports(tmp_path: Path, capsys, output_type) -> None:
+    """Every export uses the same corrected glob selection."""
+    for relative_path in (
+        "src/cache/hidden-directory.txt",
+        "a/cache/hidden-nested.txt",
+        "src/hidden-direct.py",
+        "src/nested/visible-nested.py",
+        "secret.txt",
+        "a/secret.txt",
+        "cache",
+    ):
+        path = tmp_path / relative_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.touch()
+    (tmp_path / ".p2mignore").write_text(
+        "src/cache/\n**/cache/\n/cache/\nsrc/*.py\n**/secret.txt\n",
+        encoding="utf-8",
+    )
+
+    code, output = _run_cli_capture(
+        capsys, ["--directory", str(tmp_path), "-t", output_type]
+    )
+
+    assert code == 0
+    assert "visible-nested.py" in output
+    assert "cache" in output  # Root regular file survives directory-only rules.
+    for excluded in (
+        "hidden-directory",
+        "hidden-nested",
+        "hidden-direct",
+        "secret.txt",
+    ):
+        assert excluded not in output
+
+
 def test_cli_precedence_chain_e2e(tmp_path: Path, capsys) -> None:
     """defaults -> .p2mignore -> --ignore -> --filter is preserved end-to-end."""
     (tmp_path / "src").mkdir()

@@ -4,7 +4,57 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from path2map.ignore import IgnoreConfig, PathEntry, filter_ignored_entries
+import pytest
+
+from path2map.ignore import (
+    IgnoreConfig,
+    PathEntry,
+    filter_ignored_entries,
+    matches_any_ignore_pattern,
+)
+
+
+@pytest.mark.parametrize(
+    "pattern,path,is_dir,expected",
+    [
+        ("src/*/", "src/cache", True, True),
+        ("**/cache/", "a/cache", True, True),
+        ("/cache/", "cache", False, False),
+        ("src/*.py", "src/nested/main.py", False, False),
+        ("**/secret.txt", "secret.txt", False, True),
+        ("src/*/", "src/cache/item.txt", False, True),
+        ("src/*/", "src/cache", False, False),
+        ("src/*/", "other/src/cache", True, False),
+        ("**/cache/", "cache", True, True),
+        ("**/cache/", "a/b/cache/item", False, True),
+        ("**/cache/", "a/cache", False, False),
+        ("/cache/", "cache/item", False, True),
+        ("/cache/", "a/cache", True, False),
+        ("cache/", "a/cache", True, True),
+        ("src/*.py", "src/main.py", False, True),
+        ("src/*.py", "other/src/main.py", False, False),
+        ("src/*.py", "src/pkg.py/child", False, True),
+        ("**/secret.txt", "a/b/secret.txt", False, True),
+        ("a/**/b", "a/b", False, True),
+        ("a/**/b", "a/x/y/b", False, True),
+        ("a/**/b", "other/a/b", False, False),
+        ("a/**", "a", True, False),
+        ("a/**", "a/x/y", False, True),
+        ("src/?.[ch]", "src/a.c", False, True),
+        ("src/?.[ch]", "src/ab.c", False, False),
+        ("src/?.[ch]", "src/x/a.c", False, False),
+        ("src/**x/file", "src/a/bx/file", False, False),
+        ("/secret.txt", "nested/secret.txt", False, False),
+        ("*.pyc", "nested/a.pyc", False, True),
+        ("/", "anything", True, False),
+    ],
+)
+def test_ignore_glob_path_segments(pattern, path, is_dir, expected) -> None:
+    """Globs respect segment boundaries, anchoring, and directory types."""
+    assert (
+        matches_any_ignore_pattern(rel_path=path, is_dir=is_dir, patterns=[pattern])
+        is expected
+    )
 
 
 def test_default_ignores_exclude_matching_paths() -> None:
