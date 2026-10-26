@@ -21,15 +21,52 @@ def _all_paths(root) -> list[str]:
     return paths
 
 
-def test_max_depth_zero_returns_only_root(tmp_path: Path) -> None:
+def test_max_depth_zero_returns_only_root(tmp_path: Path, monkeypatch) -> None:
     """max_depth=0 keeps only the scan root node."""
     (tmp_path / "child.txt").write_text("x", encoding="utf-8")
+
+    def unexpected(*args, **kwargs):
+        raise AssertionError("Depth zero must not enumerate or collect metadata")
+
+    monkeypatch.setattr("path2map.traversal.os.scandir", unexpected)
+    monkeypatch.setattr("path2map.traversal._entry_size", unexpected)
+    monkeypatch.setattr("path2map.traversal._entry_mtime", unexpected)
 
     model = build_tree(tmp_path, options=TraversalOptions(max_depth=0))
 
     assert model.root.path == "."
     assert model.root.depth == 0
     assert model.root.children == []
+
+
+@pytest.mark.parametrize("max_depth", [0, 1, None])
+@pytest.mark.parametrize("kind", ["missing", "file"])
+def test_invalid_scan_root(tmp_path: Path, max_depth, kind) -> None:
+    """Invalid roots retain useful filesystem exceptions at every depth."""
+    root = tmp_path / kind
+    if kind == "file":
+        root.touch()
+    error = FileNotFoundError if kind == "missing" else NotADirectoryError
+    with pytest.raises(error):
+        build_tree(root, options=TraversalOptions(max_depth=max_depth))
+
+
+@pytest.mark.parametrize("max_depth", [0, 1, None])
+@pytest.mark.parametrize("mode", ["show", "skip", "follow"])
+def test_directory_symlink_scan_root(
+    tmp_path: Path, followed_directory_link, max_depth, mode
+) -> None:
+    """A root link resolves to its directory regardless of descendant link mode."""
+    target = tmp_path / "target"
+    target.mkdir()
+    (target / "child.txt").touch()
+    link = tmp_path / "link"
+    followed_directory_link(link, target)
+    model = build_tree(
+        link, options=TraversalOptions(max_depth=max_depth, symlink_mode=mode)
+    )
+    assert model.scan_root == str(target.resolve())
+    assert _all_paths(model.root) == (["."] if max_depth == 0 else [".", "child.txt"])
 
 
 def test_default_symlink_mode_shows_but_does_not_follow(

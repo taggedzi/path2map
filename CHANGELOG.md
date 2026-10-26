@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- Validate scan roots at every depth, including `--max-depth 0`. Missing paths
+  and regular files now fail with a concise CLI error and no export (#7).
 - Keep text and Markdown file exports free of ANSI color under `--color auto`,
   while combined `--stdout` output remains TTY-aware. Explicit `always` and
   `never` policies still apply to both destinations (#6).
