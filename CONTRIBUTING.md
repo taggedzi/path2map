@@ -76,7 +76,5 @@ rm -rf .pkg-smoke-venv
    - build `sdist` and `wheel`
    - run `twine check`
    - create a GitHub Release and attach artifacts
-5. Optional PyPI publishing:
-   - set repository variable `PYPI_PUBLISH=true`
-   - set secret `PYPI_API_TOKEN`
-   - configure required approvals on the `pypi` environment
+
+Release automation publishes package artifacts to GitHub Releases only.
