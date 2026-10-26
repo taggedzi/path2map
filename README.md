@@ -118,6 +118,11 @@ python -m path2map --directory . --color always --emojis
 
 Symlink behavior:
 
+Followed directory links keep their children beneath the link's logical path
+(for example, `alias/inside.txt`), including targets outside the scan root.
+Ignore and filter rules match these logical paths. Each alias has its own subtree;
+links back to an ancestor stop at the cycle.
+
 ```bash
 python -m path2map --directory . --follow-symlinks
 python -m path2map --directory . --symlinks show
