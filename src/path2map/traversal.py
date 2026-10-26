@@ -69,7 +69,7 @@ def enumerate_entries(
     visited: set[tuple[int, int] | str] = {_directory_identity(scan_root)}
     entries: list[TraversedEntry] = []
     _walk_directory(
-        scan_root=scan_root,
+        logical_dir=Path(),
         current_dir=scan_root,
         depth=1,
         options=opts,
@@ -126,7 +126,7 @@ def tree_from_entries(
 
 def _walk_directory(
     *,
-    scan_root: Path,
+    logical_dir: Path,
     current_dir: Path,
     depth: int,
     options: TraversalOptions,
@@ -139,7 +139,9 @@ def _walk_directory(
     for entry in _iter_entries(current_dir, options.sort_key):
         is_symlink = entry.is_symlink()
         path = Path(entry.path)
-        rel_path = path.relative_to(scan_root).as_posix()
+        # Physical paths may leave the scan root; output paths stay under the alias.
+        logical_path = logical_dir / entry.name
+        rel_path = logical_path.as_posix()
 
         if is_symlink and options.symlink_mode == "skip":
             continue
@@ -179,7 +181,7 @@ def _walk_directory(
 
             if should_traverse:
                 _walk_directory(
-                    scan_root=scan_root,
+                    logical_dir=logical_path,
                     current_dir=traversal_path,
                     depth=depth + 1,
                     options=options,

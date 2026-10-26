@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from path2map.traversal import TraversalOptions, build_tree
 
 
@@ -113,3 +115,63 @@ def test_relative_paths_and_depth_are_tracked(tmp_path: Path) -> None:
     file_node = next(child for child in src_node.children if child.name == "main.py")
     assert src_node.depth == 1
     assert file_node.depth == 2
+
+
+@pytest.mark.parametrize("external", [False, True])
+def test_follow_preserves_each_alias_tree(
+    tmp_path: Path, followed_directory_link, external: bool
+) -> None:
+    """Internal/external targets retain separate alias children and cycle markers."""
+    root = tmp_path / "root"
+    root.mkdir()
+    target = (tmp_path if external else root) / "real"
+    (target / "nested").mkdir(parents=True)
+    (target / "nested" / "inside.txt").write_text("x", encoding="utf-8")
+    followed_directory_link(target / "loop", target)
+    for alias in ("alias", "second"):
+        followed_directory_link(root / alias, target)
+
+    model = build_tree(root, options=TraversalOptions(symlink_mode="follow"))
+    prefixes = ["alias"] + ([] if external else ["real"]) + ["second"]
+    expected = ["."]
+    for prefix in prefixes:
+        expected.extend(
+            [
+                prefix,
+                f"{prefix}/loop",
+                f"{prefix}/nested",
+                f"{prefix}/nested/inside.txt",
+            ]
+        )
+    assert _all_paths(model.root) == expected
+    for node in model.root.children:
+        loop, nested = node.children
+        assert loop.symlink_cycle is True
+        assert loop.children == []
+        assert nested.depth == 2
+        assert nested.children[0].depth == 3
+
+
+@pytest.mark.parametrize("mode", ["follow", "show", "skip"])
+@pytest.mark.parametrize("max_depth", [0, 1, 2, 3, None])
+def test_alias_depth_and_modes(
+    tmp_path: Path, followed_directory_link, mode, max_depth
+) -> None:
+    """Depth limits count logical components; show/skip never enter targets."""
+    root = tmp_path / "root"
+    root.mkdir()
+    target = tmp_path / "external"
+    (target / "nested").mkdir(parents=True)
+    (target / "nested" / "file.txt").write_text("x", encoding="utf-8")
+    followed_directory_link(root / "alias", target)
+    model = build_tree(
+        root, options=TraversalOptions(symlink_mode=mode, max_depth=max_depth)
+    )
+    expected = ["."]
+    if mode != "skip" and max_depth != 0:
+        expected.append("alias")
+        if mode == "follow" and (max_depth is None or max_depth >= 2):
+            expected.append("alias/nested")
+            if max_depth is None or max_depth >= 3:
+                expected.append("alias/nested/file.txt")
+    assert _all_paths(model.root) == expected

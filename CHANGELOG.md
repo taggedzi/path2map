@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Preserve alias-relative paths and depths when following directory symlinks,
+  including external targets and multiple aliases. Ignore and filter rules now
+  match those logical paths, while cycle detection remains branch-local (#3).
+
 ## [v0.1.0] - 2026-02-06
 
 ### Added

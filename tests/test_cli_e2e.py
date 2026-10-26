@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import json
 from datetime import datetime
 from pathlib import Path
+
+import pytest
 
 from path2map import cli
 
@@ -157,3 +160,53 @@ def test_cli_metadata_opt_in_collects_when_enabled(
 
     assert code == 0
     assert "file.txt (5 B, 2026-01-02)" in text
+
+
+@pytest.mark.parametrize("external", [False, True])
+@pytest.mark.parametrize(
+    "follow_args", [["--follow-symlinks"], ["--symlinks", "follow"]]
+)
+def test_cli_follow_alias_paths_and_rules(
+    tmp_path: Path, capsys, followed_directory_link, external, follow_args
+) -> None:
+    """CLI filtering and each ignore stage use alias paths, preserving ancestors."""
+    root = tmp_path / "root"
+    root.mkdir()
+    target = (tmp_path if external else root) / "real"
+    (target / "nested").mkdir(parents=True)
+    for name in ("keep.py", "project.py", "cli.py"):
+        (target / "nested" / name).write_text("x", encoding="utf-8")
+    (target / "build").mkdir()
+    (target / "build" / "out.py").write_text("x", encoding="utf-8")
+    followed_directory_link(root / "alias", target)
+    followed_directory_link(root / "second", target)
+    (root / ".p2mignore").write_text("alias/nested/project.py\n", encoding="utf-8")
+
+    code, output = _run_cli_capture(
+        capsys,
+        [
+            "--directory",
+            str(root),
+            *follow_args,
+            "-t",
+            "json",
+            "-F",
+            "^alias/",
+            "-i",
+            r"^alias/nested/cli\.py$",
+        ],
+    )
+    assert code == 0
+    tree = json.loads(output)
+
+    def paths(node):
+        return [(node["path"], node["depth"])] + [
+            item for child in node["children"] for item in paths(child)
+        ]
+
+    assert paths(tree) == [
+        (".", 0),
+        ("alias", 1),
+        ("alias/nested", 2),
+        ("alias/nested/keep.py", 3),
+    ]
