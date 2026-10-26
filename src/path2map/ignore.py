@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from fnmatch import fnmatch
 from pathlib import Path
-import re
-from typing import Pattern
+from re import Pattern
 
 DEFAULT_IGNORE_PATTERNS: tuple[str, ...] = (
     ".git/",
@@ -98,10 +98,7 @@ def should_ignore_entry(
     ):
         return True
 
-    if any(regex.search(rel_path) for regex in cli_ignore_patterns):
-        return True
-
-    return False
+    return any(regex.search(rel_path) for regex in cli_ignore_patterns)
 
 
 def compile_cli_ignore_patterns(ignore_value: str | None) -> list[Pattern[str]]:

@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Iterator, Literal
+from typing import Literal
 
 NodeType = Literal["directory", "file"]
 
@@ -18,7 +19,7 @@ class TreeNode:
     type: NodeType
     depth: int
     ext: str = ""
-    children: list["TreeNode"] = field(default_factory=list)
+    children: list[TreeNode] = field(default_factory=list)
     size: int | None = None
     mtime: datetime | None = None
     is_symlink: bool = False
@@ -40,11 +41,11 @@ class TreeNode:
         path: str,
         name: str,
         depth: int,
-        children: list["TreeNode"] | None = None,
+        children: list[TreeNode] | None = None,
         is_symlink: bool = False,
         symlink_target: str | None = None,
         symlink_cycle: bool = False,
-    ) -> "TreeNode":
+    ) -> TreeNode:
         """Create a directory node."""
         return cls(
             path=path,
@@ -71,7 +72,7 @@ class TreeNode:
         is_symlink: bool = False,
         symlink_target: str | None = None,
         symlink_cycle: bool = False,
-    ) -> "TreeNode":
+    ) -> TreeNode:
         """Create a file node."""
         return cls(
             path=path,

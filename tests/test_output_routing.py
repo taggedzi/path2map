@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 import io
+from datetime import datetime
 from pathlib import Path
 
 from path2map.output import OutputOptions, resolve_output_path, route_output
