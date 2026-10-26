@@ -33,17 +33,18 @@ def route_output(
     content: str,
     *,
     options: OutputOptions,
+    stdout_content: str | None = None,
     stream: TextIO | None = None,
     now_fn: Callable[[], datetime] | None = None,
 ) -> list[Path]:
-    """Route rendered content to stdout and/or file outputs."""
+    """Route content, optionally using a separate rendering for stdout."""
     target_stream = stream or sys.stdout
     now_provider = now_fn or datetime.now
 
     written_files: list[Path] = []
 
     if options.stdout or options.output_path is None:
-        print(content, file=target_stream)
+        print(content if stdout_content is None else stdout_content, file=target_stream)
 
     if options.output_path is None:
         return written_files

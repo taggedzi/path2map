@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- Keep text and Markdown file exports free of ANSI color under `--color auto`,
+  while combined `--stdout` output remains TTY-aware. Explicit `always` and
+  `never` policies still apply to both destinations (#6).
 - Honor `--folders-only` in JSON and CSV as well as text, Markdown, and HTML
   by selecting directories in the shared pipeline (#5). Schemas are unchanged.
 - Correct `.p2mignore` glob segment boundaries, root anchoring, directory-only
