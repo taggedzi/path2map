@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [v2026.11.23] - 2026-11-23
+
 ### Changed
 - Cut releases from the Release GitHub Action with UTC date numbers
   (`YYYY.MM.DD`, plus `.N` for another release the same day).
