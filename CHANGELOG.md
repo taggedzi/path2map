@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Cut releases from the Release GitHub Action with UTC date numbers
+  (`YYYY.MM.DD`, plus `.N` for another release the same day).
+
 ### Fixed
 - Validate scan roots at every depth, including `--max-depth 0`. Missing paths
   and regular files now fail with a concise CLI error and no export (#7).

@@ -1,5 +1,9 @@
 # Release Candidate Dry Run (2026-02-07)
 
+The release process is now the **Release** workflow described in
+[Versioning and Compatibility Policy](versioning.md). This page records the
+2026-02-07 dry run only.
+
 This checklist captures the Step 20 dry run outcome before public announcement.
 
 ## 1) Local quality checks

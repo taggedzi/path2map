@@ -35,7 +35,8 @@ pytest -rs` to see skip reasons. Skipped tests do not validate symlink behavior.
 
 ## Packaging Validation
 
-Before release, run a full packaging check from the repository root:
+To validate packaging locally, run a full packaging check from the repository root.
+The Release workflow builds the artifacts and checks them before it publishes.
 
 ```bash
 source .venv/bin/activate
@@ -72,16 +73,17 @@ rm -rf .pkg-smoke-venv
 
 ## Release Process (Maintainers)
 
-1. Ensure `main` is green in CI and `CHANGELOG.md` + version are updated.
-2. Run local packaging validation:
-   - `source .venv/bin/activate`
-   - `bash scripts/package_check.sh`
-3. Create and push a version tag:
-   - `git tag v0.1.0`
-   - `git push origin v0.1.0`
-4. The `Release` workflow will:
-   - build `sdist` and `wheel`
-   - run `twine check`
-   - create a GitHub Release and attach artifacts
+Releases are cut from GitHub Actions. The version number is the UTC date
+(`YYYY.MM.DD`, or `YYYY.MM.DD.N` for another release that same day).
 
-Release automation publishes package artifacts to GitHub Releases only.
+1. Put notes under `## [Unreleased]` in `CHANGELOG.md` and merge them to the
+   branch you want to release.
+2. Open **Actions → Release → Run workflow** and choose that branch
+   (`main` for a normal release).
+3. The workflow assigns the version, updates `CHANGELOG.md`, `pyproject.toml`,
+   and `src/path2map/__init__.py`, runs the quality checks, builds the sdist
+   and wheel, pushes the version commit, and publishes a GitHub Release with
+   those artifacts attached.
+
+The selected branch must accept pushes from `github-actions[bot]`. Publishing
+stays on GitHub Releases only. Details are in `docs/versioning.md`.
